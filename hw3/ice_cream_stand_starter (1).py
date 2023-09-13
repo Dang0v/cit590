@@ -87,13 +87,13 @@ def get_ice_cream_flavor(ice_cream_flavors):
         flavor_picked = get_first_letter_of_user_input("Which flavor would you like (v/c/s)? ")
         # choose the flavor
         if flavor_picked == "v":
-            flavor_picked = 0   # for ice_cream_flavors[0]
+            flavor_picked = ice_cream_flavors[0]
             return flavor_picked
         elif flavor_picked == "c":
-            flavor_picked = 1   # for ice_cream_flavors[1]
+            flavor_picked = ice_cream_flavors[1]
             return flavor_picked
         elif flavor_picked == "s":
-            flavor_picked = 2   # for ice_cream_flavors[2]
+            flavor_picked = ice_cream_flavors[2]
             return flavor_picked
 
 
@@ -114,13 +114,13 @@ def get_ice_cream_size(ice_cream_sizes):
         size_picked = get_first_letter_of_user_input("Which size would you like (s/m/l)? ")
         # choose the size
         if size_picked == "s":
-            size_picked = 0     # for ice_cream_sizes[0]
+            size_picked = ice_cream_sizes[0]
             return size_picked
         elif size_picked == "m":
-            size_picked = 1     # for ice_cream_sizes[1]
+            size_picked = ice_cream_sizes[1]
             return size_picked
         elif size_picked == "l":
-            size_picked = 2     # for ice_cream_sizes[2]
+            size_picked = ice_cream_sizes[2]
             return size_picked
 
 
@@ -130,7 +130,8 @@ def get_ice_cream_order_price(ice_cream_size, ice_cream_prices, ice_cream_sizes)
     Returns: The equivalent price of an ice cream size. Example: Returns 4.99 if ice_cream_size is 'Small'
     """
     # return the same index in price list
-    return ice_cream_prices[ice_cream_size]
+    
+    return ice_cream_prices[ice_cream_sizes.index(ice_cream_size)]
 
 
 def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_cream_prices):
@@ -169,7 +170,7 @@ def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_c
 
         # Print the details for this order
         #   Hint: See https://www.w3schools.com/python/python_string_formatting.asp for string formatting examples on rounding to 2 decimal places
-        print("You ordered a %s %s for $%.2f" %(ice_cream_sizes[size_chosen], ice_cream_flavors[flavor_chosen], order_cost))
+        print("You ordered a %s %s for $%.2f" %(size_chosen, flavor_chosen, order_cost))
         
     # Print the customer's total_bill
     print("Your total bill is: $%.2f" %(total_bill))
@@ -196,12 +197,14 @@ def get_first_letter_of_user_input(question):
 
     first_letter = ""
     user_in = input(question + "")
-    user_in = user_in.strip("")
-    first_letter = user_in.lower()
+    user_in = user_in.strip(" ")
+    user_in = user_in.lower()
+    
 
-    if first_letter == "":
+    if user_in == "":
         return -1
     else:
+        first_letter = user_in[0]
         return first_letter
 
 
