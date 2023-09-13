@@ -279,7 +279,7 @@ def main():
         input('Press any key to open the shop! ')
         queue_is_open = True
 
-        # TODO: Call the print_welcome_and_menu function with the parameters in the following order -
+        #  Call the print_welcome_and_menu function with the parameters in the following order -
         #  ice_cream_flavors, ice_cream_sizes, ice_cream_prices
         print_welcome_and_menu(ice_cream_flavors, ice_cream_sizes,ice_cream_prices)
 
@@ -307,7 +307,7 @@ def main():
             # print(customers_in_queue)
 
         while queue_is_open:
-            # TODO: Extract the first customer (index 0) from the customers_in_queue and save it to
+            #  Extract the first customer (index 0) from the customers_in_queue and save it to
             #  the current_customer_name variable.
             #  After extraction, the customer should now be removed from the customers_in_queue list.
             #  Hint: Use the pop function with an index argument
