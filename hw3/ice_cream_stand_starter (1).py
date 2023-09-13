@@ -10,7 +10,6 @@ Topics Covered:
 - Formatted Strings
 """
 
-# TODO: Students, fill out statement of work header
 # Student Name in Canvas: Qiwen Luo
 # Penn ID: 28188168
 # Did you do this homework on your own (yes / no): no
@@ -214,7 +213,6 @@ def are_all_customers_served(customer_queue_length):
     Otherwise, returns False.
     Returns: True or False
     """
-    # TODO: Write your code here
     if customer_queue_length == 0:
         return True
     else:
