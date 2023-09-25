@@ -224,6 +224,10 @@ def check_card_type(card):
         return False
 
 def human_play(human_tank, human_cards, water_cards_pile, power_cards_pile, opponent_tank):
+    '''
+    Human play function, ask for user input.
+    Return 2-tuple of tank level
+    '''
     # basic info prompt
     print("\n=== Human Player's turn ===")
     print("Your water level is at:  %d" %(human_tank))
@@ -276,6 +280,10 @@ def human_play(human_tank, human_cards, water_cards_pile, power_cards_pile, oppo
     
 
 def computer_play(computer_tank, computer_cards, water_cards_pile, power_cards_pile, opponent_tank):
+    '''
+    Computer play function, ask for user input.
+    Return 2-tuple of tank level
+    '''
     # basic info prompt
     print("\n=== Computer Player's turn ===")
     print("Your water level is at:  %d" %(computer_tank))
@@ -287,6 +295,8 @@ def computer_play(computer_tank, computer_cards, water_cards_pile, power_cards_p
         card_to_use = "DOT"
     if "DMT" in computer_cards and computer_tank < 40 and computer_tank > computer_cards[2]:
         card_to_use = "DMT"
+    if "SOH" in computer_cards and opponent_tank / 2 > computer_cards[2] and computer_tank + int(opponent_tank / 2) < 80:
+        card_to_use = "SOH"
     else:
         card_to_use = computer_cards[2]
 
