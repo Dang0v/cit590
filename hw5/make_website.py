@@ -3,8 +3,9 @@ def surround_block(tag, text):
     Surrounds the given text with the given html tag and returns the string.
     """
 
-    # insert code
-    pass
+    html = "<" + tag + ">" + text + "</" + tag + ">"
+
+    return html
 
 def create_email_link(email_address):
     """
@@ -48,25 +49,61 @@ def generate_html(txt_input_file, html_output_file):
     # check the first character
     if name[0].islower():
         name = "Invalid Name"
+    else:
+        name = name[:-2]
     # print(name)
 
+    # searching for indexes
+    for i, lines in enumerate(resume):
+        if "Courses" in lines:
+            course_index = i
+        elif "Projects" in lines:
+            project_index_start = i + 1
+        elif "----------" in lines:
+            project_index_stop = i 
+        elif "@" in lines:
+            email_index = i
+
+    # print(course_index)
+    # print(project_index_start)
+    # print(project_index_stop)
+    # print(email_index)
+
     # get email address
-    for i in resume:
-        for j in i:
-            if j == "@":
-                break
-        email = i
+    email = resume[email_index].strip(" ")
+    email = email[:-1]
+    # TODO: email validation
     # print(email)
 
-    # get courese
-    for i in resume:
-        if "Course" in i:
-            course_line = i
-            break
-    course = course_line.split(",")
-    course[0] = course[0].replace("Course", "")
+    # get courses
+    # fromatting courses
+    # normalize the first course
+    course = resume[course_index].split(",")
+    course[0] = course[0].replace("Courses", "")
+    # discard all non-alphabet character in the front
+    # https://www.w3schools.com/python/ref_func_enumerate.asp
+    for i, course_single in enumerate(course):
+        for j, char in enumerate(course_single):
+            if char.isalpha():
+                # the last course will have "\n" at the end
+                if course_single == course[-1]:
+                    course[i] = course_single[j: -2]
+                    break
+                course[i] = course_single[j:]
+                break
+    # print(course)
+
+    # get project
+    project = resume[project_index_start : project_index_stop]
+    for i, project_single in enumerate(project):
+        for j, char in enumerate(project):
+            if char.isalpha():
+                project[i] = project_single[j:-2]
+
+    print(project)
     
 
+    
     
 
 
