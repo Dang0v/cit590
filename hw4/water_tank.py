@@ -2,7 +2,9 @@
 # Penn ID: 28188168
 # Did you do this homework on your own (yes / no): yes
 # Resources used outside course materials:
-# 
+# 1. python try except: https://www.w3schools.com/python/python_try_except.asp
+# 2. type funtion: https://www.w3schools.com/python/ref_func_type.asp
+# 3. list operation: https://www.w3schools.com/python/python_lists.asp
 
 # import statements
 from random import shuffle
