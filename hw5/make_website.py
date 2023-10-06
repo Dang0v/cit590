@@ -1,3 +1,10 @@
+# Student Name in Canvas: QIWEN LUO
+# Penn ID: 28188168
+# Did you do this homework on your own (yes / no): yes
+# Resources used outside course materials:
+# 1. python enumerate: https://www.w3schools.com/python/python_try_except.asp
+
+
 def surround_block(tag, text):
     """
     Surrounds the given text with the given html tag and returns the string.
@@ -39,7 +46,7 @@ def get_name(input_file):
     Return "Invalida Name" if it's invalid
     """
     # name will always at the top
-    name = input_file[0]
+    name = input_file[0].strip(" ")
     # check the first character
     if name[0].islower():
         name = "Invalid Name"
@@ -69,8 +76,7 @@ def get_email(input_file, email_index):
     Fine the email line, validate and return.
     If it is invalid, return an empty string.
     """
-    email = input_file[email_index].strip(" ")
-    email = email.strip("\n")
+    email = input_file[email_index].strip(" \t\n")
     # validation
     # check for numbers
     email_parts = email.split("@")
@@ -97,23 +103,26 @@ def get_courses(input_file, course_index):
     courses = []
     # split into a list
     course_temp = input_file[course_index].split(",")
-    # normalize the first course
+    # normalize the first course and the last course
     course_temp[0] = course_temp[0].replace("Courses", "")
+    course_temp[-1] = course_temp[-1].strip("\n")
     # discard all non-alphabet character in the front
     # https://www.w3schools.com/python/ref_func_enumerate.asp
     # fromatting courses
     for i, course_single in enumerate(course_temp):
         for j, char in enumerate(course_single):
+            # discard non alphabet char at the beginning
             if char.isalpha():
-                # the last course will have "\n" at the end
-                if course_single == course_temp[-1]:
-                    # https://www.w3schools.com/python/ref_string_rstrip.asp
-                    courses.append(course_single[j:-1].rstrip(" "))
-                    break
-                courses.append(course_single[j:].rstrip(" "))
+                courses.append(course_single[j:].strip(" \t"))
                 break
-
-    return courses
+    
+    courses_str = ""
+    for i in range(len(courses)):
+        courses_str = courses_str + courses[i]
+        if i != len(courses) - 1:
+            courses_str = courses_str + ", "
+    
+    return courses_str
 
 def get_project(input_file, project_index_start, project_index_end):
     project = []
@@ -155,7 +164,7 @@ def generate_html(txt_input_file, html_output_file):
     project = get_project(resume, project_index_start, project_index_end)
     
     # read the html templet into memory
-    html = load_in_lines(html_output_file)[:-2]
+    html = load_in_lines("resume_template.html")[:-2]
 
     # basic information section
     html.append("<div>\n")
@@ -175,8 +184,7 @@ def generate_html(txt_input_file, html_output_file):
     # courses section
     html.append("<div>\n")
     html.append(surround_block("h3", "Courses") + "\n")
-    for i in courses:
-        html.append(surround_block("span", i) + "\n")
+    html.append(surround_block("span", courses) + "\n")
     html.append("</div>\n")
 
     # ending of html file
@@ -185,30 +193,25 @@ def generate_html(txt_input_file, html_output_file):
     html.append("</html>\n")
 
     # write to file
-    f = open("test.html", "w")
+    f = open(html_output_file, "w")
     f.writelines(html)
     
-
-
-    
-
-
 def main():
 
     # DO NOT REMOVE OR UPDATE THIS CODE
     # generate resume.html file from provided sample resume.txt
-    generate_html('resume.txt', 'resume.html')
+    # generate_html('resume.txt', 'resume.html')
 
     # DO NOT REMOVE OR UPDATE THIS CODE.
     # Uncomment each call to the generate_html function when you’re ready
     # to test how your program handles each additional test resume.txt file
-    #generate_html('TestResumes/resume_bad_name_lowercase/resume.txt', 'TestResumes/resume_bad_name_lowercase/resume.html')
-    #generate_html('TestResumes/resume_courses_w_whitespace/resume.txt', 'TestResumes/resume_courses_w_whitespace/resume.html')
-    #generate_html('TestResumes/resume_courses_weird_punc/resume.txt', 'TestResumes/resume_courses_weird_punc/resume.html')
-    #generate_html('TestResumes/resume_projects_w_whitespace/resume.txt', 'TestResumes/resume_projects_w_whitespace/resume.html')
-    #generate_html('TestResumes/resume_projects_with_blanks/resume.txt', 'TestResumes/resume_projects_with_blanks/resume.html')
-    #generate_html('TestResumes/resume_template_email_w_whitespace/resume.txt', 'TestResumes/resume_template_email_w_whitespace/resume.html')
-    #generate_html('TestResumes/resume_wrong_email/resume.txt', 'TestResumes/resume_wrong_email/resume.html')
+    generate_html('TestResumes/resume_bad_name_lowercase/resume.txt', 'TestResumes/resume_bad_name_lowercase/resume.html')
+    generate_html('TestResumes/resume_courses_w_whitespace/resume.txt', 'TestResumes/resume_courses_w_whitespace/resume.html')
+    generate_html('TestResumes/resume_courses_weird_punc/resume.txt', 'TestResumes/resume_courses_weird_punc/resume.html')
+    generate_html('TestResumes/resume_projects_w_whitespace/resume.txt', 'TestResumes/resume_projects_w_whitespace/resume.html')
+    generate_html('TestResumes/resume_projects_with_blanks/resume.txt', 'TestResumes/resume_projects_with_blanks/resume.html')
+    generate_html('TestResumes/resume_template_email_w_whitespace/resume.txt', 'TestResumes/resume_template_email_w_whitespace/resume.html')
+    generate_html('TestResumes/resume_wrong_email/resume.txt', 'TestResumes/resume_wrong_email/resume.html')
 
     # If you want to test additional resume files, call the generate_html function with the given .txt file
     # and desired name of output .html file
