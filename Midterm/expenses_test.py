@@ -95,6 +95,10 @@ class Expenses_Test(unittest.TestCase):
         expenses_manager.deduct_expense(self.expenses, "food", -2)
         self.assertAlmostEqual(5, self.expenses.get("food").amount)
 
+        # Test deducting to 0
+        expenses_manager.deduct_expense(self.expenses, "food", 5)
+        self.assertAlmostEqual(0, self.expenses.get("food").amount)
+
 
 
     def test_update_expense(self):
