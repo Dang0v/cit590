@@ -12,19 +12,17 @@ class Expense(object):
 
     def add_amount(self, amount):
         """Adds the given amount to the total amount of the expense.
-        This method doesn’t return anything.
+        This method doesn't return anything.
         """
 
-        # TODO insert your code
-        raise NotImplementedError  # remove this line and replace with your code
+        self.amount += amount
 
     def deduct_amount(self, amount):
         """Deducts the given amount from the total amount of the expense.
-        This method doesn’t return anything.
+        This method doesn't return anything.
         """
 
-        # TODO insert your code
-        raise NotImplementedError  # remove this line and replace with your code
+        self.amount -= amount
 
     def __str__(self):
         """Returns string representation of expense, aimed at the user.

@@ -19,9 +19,13 @@ class ExpensesManager(object):
         this method.)
         """
 
-        # TODO insert your code
-        raise NotImplementedError  # remove this line and replace with your code
+        if expense_type in expenses:
+            return expenses.get(expense_type)        
+        else:
+            print("The expenses type does not exist! Nothing will be returned.")
+            return None
 
+        
     def add_expense(self, expenses, expense_type, value):
         """If the expense_type already exists in the given expenses dictionary, add the value to the associated
         Expense object amount.
@@ -31,11 +35,18 @@ class ExpensesManager(object):
 
         Prints the updated Expense object.
 
-        This method doesn’t return anything.
+        This method doesn't return anything.
         """
 
-        # TODO insert your code
-        raise NotImplementedError  # remove this line and replace with your code
+        if expense_type in expenses:
+            if value < 0:
+                print("Amount cannot be negative! Nothing will be done.")
+            else:
+                expenses.get(expense_type).add_amount(value)
+                print("The %s expense is now %.2f" %(expense_type, expenses.get(expense_type).amount))
+        else:
+            expenses[expense_type] = Expense(expense_type, value)
+
 
     def deduct_expense(self, expenses, expense_type, value):
         """From the given expenses dictionary, get the Expense object associated with the given expense_type and
@@ -51,11 +62,21 @@ class ExpensesManager(object):
 
         Print the updated Expense object if RuntimeError is not raised.
 
-        This method doesn’t return anything.
+        This method doesn't return anything.
         """
 
-        # TODO insert your code
-        raise NotImplementedError  # remove this line and replace with your code
+        if expense_type in expenses:
+            if value < 0:
+                print("Amount cannot be negative! Nothing will be done.")
+            else:
+                if expenses.get(expense_type).amount < value:
+                    raise RuntimeError("Cannot deduct! The given value is greater! Nothing will be done.")
+                else:
+                    expenses.get(expense_type).deduct_amount(value)
+                    print("The %s expense is now %.2f" %(expense_type, expenses.get(expense_type).amount))
+        else:
+            print("The expenses type does not exist!")
+
 
     def update_expense(self, expenses, expense_type, value):
         """From the given expenses dictionary, update the Expense object associated with the given expense_type and
@@ -67,31 +88,50 @@ class ExpensesManager(object):
 
         Prints the updated Expense object if it exists.
 
-        This method doesn’t return anything.
+        This method doesn't return anything.
         """
 
-        # TODO insert your code
-        raise NotImplementedError  # remove this line and replace with your code
+        if expense_type in expenses:
+            if value < 0:
+                print("Amount cannot be negative! Nothing will be done.")
+            else:
+                expenses.update({expense_type: Expense(expense_type, value)})
+                print("The %s expense is now %.2f" %(expense_type, expenses.get(expense_type).amount))
+        else:
+            print("The expenses type does not exist!")
+
 
     def sort_expenses(self, expenses, sorting):
         """Converts the key:value pairs in the given expenses dictionary to a list of tuples containing the expense
         type and amount of the Expense object (Expense.expense_type, Expense.amount) and sorts based on the given
         sorting argument.
 
-        If the sorting argument is the string ‘expense_type’, sorts the list of tuples based on the expense type
-        (e.g. ‘rent’) in ascending alphabetical order of the expense_type, e.g. sorted results: ("coffee", 5.0),
+        If the sorting argument is the string 'expense_type', sorts the list of tuples based on the expense type
+        (e.g. 'rent') in ascending alphabetical order of the expense_type, e.g. sorted results: ("coffee", 5.0),
         ("food", 5000.0), ("rent", 1000.0)
 
-        Otherwise, if the sorting argument is ‘amount’, sorts the list of tuples based on the total expense amount
+        Otherwise, if the sorting argument is 'amount', sorts the list of tuples based on the total expense amount
         (e.g. 825.0) in descending order of the expense amount, e.g. sorted results: ("food", 5000.0), ("rent",
         1000.0), ("coffee", 5.0)
 
         Returns the list of sorted tuples. (Note: If the given sorting argument is not an acceptable value
-        (e.g. ‘expense_type’ or 'amount'), this method does nothing except print a friendly message and return None.)
+        (e.g. 'expense_type' or 'amount'), this method does nothing except print a friendly message and return None.)
         """
-
-        # TODO insert your code
-        raise NotImplementedError  # remove this line and replace with your code
+        sorted_list = []
+        if sorting == "expense_type":
+            sorted_items = sorted(expenses.values(), key=lambda x: x.expense_type)
+            for i in sorted_items:
+                sorted_list.append((i.expense_type, i.amount))
+            return sorted_list
+        elif sorting == "amount":
+            sorted_items = sorted(expenses.values(), key=lambda x: x.amount, reverse=True)
+            for i in sorted_items:
+                sorted_list.append((i.expense_type, i.amount))
+            return sorted_list
+        else:
+            print("No such sorting method exists! Nothing will be done.")
+            return None
+        
 
     def export_expenses(self, expenses, expense_types, file):
         """Exports the Expense objects associated with the given expense_types from the given expenses dictionary to
@@ -105,17 +145,17 @@ class ExpensesManager(object):
 
         If the expenses argument is the dictionary {"food": Expense("food", 5000.00), "rent": Expense("rent",
         1000.00), "coffee": Expense("coffee", 5.00), "clothes": Expense("clothes", 58.92)} and the expense_types
-        argument is the list of strings [‘coffee', 'clothes', 'rent’], exports a file containing: coffee: 5.00
+        argument is the list of strings ['coffee', 'clothes', 'rent'], exports a file containing: coffee: 5.00
         clothes: 58.92 rent: 1000.00
 
         If the expenses argument is the dictionary {"food": Expense("food", 5000.00), "rent": Expense("rent",
         1000.00), "coffee": Expense("coffee", 5.00), "clothes": Expense("clothes", 58.92)} and the expense_types
-        argument is the list of strings [‘coffee', 'clothes', 'sports’], exports a file containing: coffee: 5.00
+        argument is the list of strings ['coffee', 'clothes', 'sports'], exports a file containing: coffee: 5.00
         clothes: 58.92
 
         Note, the specified expense type 'sports' does not exist in the expenses dictionary, so it is ignored.
 
-        If an item is duplicated in the given expense types, don’t worry about it, just export the data as is. You
+        If an item is duplicated in the given expense types, don't worry about it, just export the data as is. You
         should not deduplicate the expense types.
 
         Note: Each purchase should be written on its own line in the output file for example if it were the later example
@@ -123,8 +163,13 @@ class ExpensesManager(object):
         coffee: 12.40
         clothes: 45.00
 
-        This method doesn’t return anything.
+        This method doesn't return anything.
         """
-
-        # TODO insert your code
-        raise NotImplementedError  # remove this line and replace with your code
+        f = open(file, "w")
+        # start with a blank file
+        lines = []
+        for i in expense_types:
+            if i in expenses:
+                lines.append(str(expenses[i]) + "\n")
+        f.writelines(lines)
+        f.close()
