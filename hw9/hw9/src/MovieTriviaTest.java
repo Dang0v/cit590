@@ -76,7 +76,13 @@ class MovieTriviaTest {
 		assertTrue(mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).contains("something new"),
 				"After inserting Meryl Streep again with a new Movie \"     Something New     \", \"somenthing new\" should appear as one of the movies she has appeared in.");
 
-		// TODO add additional test case scenarios
+		// actor and movie both exist
+		mt.insertActor("   Meryl STReep      ", new String[] { "   DOUBT      " },
+				movieDB.getActorsInfo());
+		assertEquals(7, movieDB.getActorsInfo().size(),
+				"Since \"meryl streep\" is already in actorsInfo, inserting \"   Meryl STReep      \" again should not increase the size of actorsInfo.");
+		assertEquals(4, mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).size(),
+				"After inserting Meryl Streep again with 2 movies, only one of which is not on the list yet, the number of movies \"meryl streep\" appeared in should be 4.");
 
 	}
 
@@ -98,6 +104,22 @@ class MovieTriviaTest {
 		mt.insertRating("doubt", new int[] { 100, 100 }, movieDB.getMoviesInfo());
 		assertEquals(8, movieDB.getMoviesInfo().size(),
 				"Since \"doubt\" is already in moviesInfo, inserting ratings for it should not increase the size of moviesInfo.");
+		
+		// rating value invalid
+		mt.insertRating("testmovie", new int[] { -2, 102 }, movieDB.getMoviesInfo());
+		assertEquals(79, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getCriticRating(),
+				"The critics rating for \"testmovie\" should not be updated.");
+		assertEquals(80, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getAudienceRating(),
+				"The audience rating for \"testmovie\" should not be updated.");
+		
+		// rating number invalid
+		mt.insertRating("testmovie2", new int[] { 1, 2, 3 }, movieDB.getMoviesInfo());
+		assertEquals(8, movieDB.getMoviesInfo().size(),
+				"Number of ratings are invlida, should do nothing");
+		mt.insertRating("testmovie3", new int[] { 1 }, movieDB.getMoviesInfo());
+		assertEquals(8, movieDB.getMoviesInfo().size(),
+				"Number of ratings are invlida, should do nothing");
+		
 
 		// look up and inspect movies based on newly inserted ratings
 		// note, this requires the use of properly implemented selectWhereRatingIs
@@ -109,7 +131,6 @@ class MovieTriviaTest {
 		assertTrue(mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).contains("doubt"),
 				"After inserting the rating for \"doubt\", \"doubt\" should appear as a movie with critic rating greater than 99.");
 
-		// TODO add additional test case scenarios
 	}
 
 	@Test
@@ -119,7 +140,13 @@ class MovieTriviaTest {
 		assertEquals("doubt", mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).get(0),
 				"\"doubt\" should show up as first in the list of movies \"meryl streep\" has appeared in.");
 
-		// TODO add additional test case scenarios
+		// with white space and upper class
+		assertEquals(0, mt.selectWhereActorIs("          Brandon KrakowSky    ", movieDB.getActorsInfo()).size(),
+				"The number of movies \"brandon krakowSky\" has appeared in should be 0.");
+		
+		// no such actor
+		assertEquals(0, mt.selectWhereActorIs("  123  ", movieDB.getActorsInfo()).size(),
+				"The number of movies \"123\" has appeared in should be 0.");
 	}
 
 	@Test
@@ -131,7 +158,14 @@ class MovieTriviaTest {
 		assertEquals(true, mt.selectWhereMovieIs("doubt", movieDB.getActorsInfo()).contains("amy adams"),
 				"\"amy adams\" should be an actor who appeared in \"doubt\".");
 
-		// TODO add additional test case scenarios
+		// no such movie
+		assertEquals(0, mt.selectWhereMovieIs("1", movieDB.getActorsInfo()).size(),
+				"There should be 0 actors in \"1\".");
+		
+		// with white space and upper class
+		assertEquals(true, mt.selectWhereMovieIs("Doubt       ", movieDB.getActorsInfo()).contains("meryl streep"),
+				"\"meryl streep\" should be an actor who appeared in \"doubt\".");
+		
 	}
 
 	@Test
@@ -143,7 +177,14 @@ class MovieTriviaTest {
 		assertEquals(2, mt.selectWhereRatingIs('<', 30, true, movieDB.getMoviesInfo()).size(),
 				"There should be 2 movies where critics rating is less than 30.");
 
-		// TODO add additional test case scenarios
+		// invalid comparison
+		assertEquals(0, mt.selectWhereRatingIs('d', 65, false, movieDB.getMoviesInfo()).size(),
+				"There should be no movie, since the comparison is invalid.");
+		
+		// invalid score
+		assertEquals(0, mt.selectWhereRatingIs('d', -23, false, movieDB.getMoviesInfo()).size(),
+				"There should be no movie, since the score is invalid.");
+		
 	}
 
 	@Test
@@ -155,7 +196,13 @@ class MovieTriviaTest {
 		assertTrue(mt.getCoActors("meryl streep", movieDB.getActorsInfo()).contains("amy adams"),
 				"\"amy adams\" was a co-actor of \"meryl streep\".");
 
-		// TODO add additional test case scenarios
+		// actor do not exist
+		assertEquals(0, mt.getCoActors("123", movieDB.getActorsInfo()).size(),
+				"\"123\" should have no co-actors.");
+		
+		// with white space and upper class
+		assertEquals(2, mt.getCoActors("   meryl Streep", movieDB.getActorsInfo()).size(),
+				"\"meryl streep\" should have 2 co-actors.");
 	}
 
 	@Test
@@ -165,7 +212,18 @@ class MovieTriviaTest {
 		assertTrue(mt.getCommonMovie("meryl streep", "tom hanks", movieDB.getActorsInfo()).contains("the post"),
 				"\"the post\" should be a common movie between \"tom hanks\" and \"meryl streep\".");
 
-		// TODO add additional test case scenarios
+		// non-existent actors
+		assertEquals(0, mt.getCommonMovie("1", "2", movieDB.getActorsInfo()).size(),
+				"there should be 0, since these actors are not existed");
+		
+		// with white space and upper class
+		assertEquals(1, mt.getCommonMovie("     meryL strEep   ", "tom hanks", movieDB.getActorsInfo()).size(),
+				"\"tom hanks\" and \"meryl streep\" should have 1 movie in common.");
+		
+		// same actor
+		assertEquals(3, mt.getCommonMovie("tom hanks", "tom hanks", movieDB.getActorsInfo()).size(),
+				"\"tom hanks\" and \"tom hanks\" should have 3 movie in common.");
+		
 	}
 
 	@Test
@@ -175,7 +233,16 @@ class MovieTriviaTest {
 		assertTrue(mt.goodMovies(movieDB.getMoviesInfo()).contains("jaws"),
 				"\"jaws\" should be considered a good movie, since it's critics and audience ratings are both greater than or equal to 85.");
 
-		// TODO add additional test case scenarios
+		// good movies
+		assertTrue(mt.goodMovies(movieDB.getMoviesInfo()).contains("rocky ii"),
+				"\"rocky ii\" should be considered a good movie, since it's critics and audience ratings are both greater than or equal to 85.");
+		assertTrue(mt.goodMovies(movieDB.getMoviesInfo()).contains("et"),
+				"\"et\" should be considered a good movie, since it's critics and audience ratings are both greater than or equal to 85.");
+		
+		// not good movies
+		assertFalse(mt.goodMovies(movieDB.getMoviesInfo()).contains("seven"),
+				"\"seven\" should be considered a not good movie, since it's critics and audience ratings are both less than 85.");
+		
 	}
 
 	@Test
@@ -185,13 +252,25 @@ class MovieTriviaTest {
 		assertTrue(mt.getCommonActors("doubt", "the post", movieDB.getActorsInfo()).contains("meryl streep"),
 				"The actor that appeared in both \"doubt\" and \"the post\" should be \"meryl streep\".");
 
-		// TODO add additional test case scenarios
+		// non exist movie
+		assertEquals(0, mt.getCommonActors("1", "2", movieDB.getActorsInfo()).size(),
+				"There should be no actor since no such movies.");
+		
+		// with white space and upper class
+		assertEquals(1, mt.getCommonActors("       Doubt", "thE Post          ", movieDB.getActorsInfo()).size(),
+				"There should be one actor that appeared in both \"doubt\" and \"the post\".");
+		
 	}
 
 	@Test
 	void testGetMean() {
-		fail(); // This automatically causes the test to fail. Remove this line when you are ready to write your own tests.
-
-		// TODO add ALL test case scenarios!
+		assertEquals(67.85, mt.getMean(movieDB.getMoviesInfo())[0], 0.01);
+		assertEquals(65.71, mt.getMean(movieDB.getMoviesInfo())[1], 0.01);
+		
+		// add new movie with score 0, 0
+		mt.insertRating("testmovie", new int[] { 0, 0 }, movieDB.getMoviesInfo());
+		assertEquals(59.37, mt.getMean(movieDB.getMoviesInfo())[0], 0.01);
+		assertEquals(57.50, mt.getMean(movieDB.getMoviesInfo())[1], 0.01);
+		
 	}
 }
