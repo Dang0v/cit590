@@ -49,7 +49,7 @@ public abstract class User {
 	 * get user's real name
 	 * @return user's real name
 	 */
-	public String getName() {
+	public final String getName() {
 		return this.name;
 	}
 	
@@ -57,7 +57,7 @@ public abstract class User {
 	 * get user's username
 	 * @return user's username
 	 */
-	public String getUserName() {
+	public final String getUserName() {
 		return this.username;
 	}
 	
@@ -65,7 +65,7 @@ public abstract class User {
 	 * get user's ID
 	 * @return user's ID
 	 */
-	public String getUserID() {
+	public final String getUserID() {
 		return this.userID;
 	}
 	
@@ -73,7 +73,7 @@ public abstract class User {
 	 * Only for test
 	 * @return
 	 */
-	public String getPassword() {
+	public final String getPassword() {
 		return this.password;
 	}
 	
@@ -82,7 +82,7 @@ public abstract class User {
 	 * @param password
 	 * @return true if password is correct
 	 */
-	public boolean userLogin(String password) {
+	public final boolean userLogin(String password) {
 		// compare password
 		// correct password
 		if (this.password.equals(password)) {

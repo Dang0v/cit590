@@ -25,6 +25,13 @@ public class Professor extends User {
 	}
 	
 	/**
+	 * Return string expression of professor
+	 */
+	public String toString() {
+		return "Name: " + this.getName() + "\nUser ID: " + this.getUserID() + "\nCourse: " + teachingcourses + "\n";
+	}
+	
+	/**
 	 * Get teaching courses
 	 * @return Array list of courses
 	 */
@@ -35,7 +42,7 @@ public class Professor extends User {
 	/**
 	 * add a new course to professor
 	 * @param course
-	 * @return 1 if add success, -1 if course is already exist, -2 if there is time conflict
+	 * @return 1 if add success, -1 if course is already exist, -3 if there is time conflict
 	 */
 	public int addCourse(Course course) {
 		// Existence validation
@@ -47,12 +54,17 @@ public class Professor extends User {
             if (this.sameDayValidation(course, coursetoCompare) == true) {
             	// start time validation
             	if (this.checkTimeConflict(course, coursetoCompare) == true)
-            		return -2;
+            		return -3;
             }            
         }
 		// add course to teaching course		
 		this.teachingcourses.add(course);
 		return 1;
+	}
+	
+	public boolean deletCourse(String courseID) {
+		Course course = this.getCoursebyID(courseID);
+		return this.teachingcourses.remove(course);
 	}
 	
 	/**

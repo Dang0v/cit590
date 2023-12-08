@@ -35,6 +35,11 @@ public class FileInfoReader {
 	private ArrayList<Admin> admins = new ArrayList<Admin>();
 	
 	/**
+	 * Username List
+	 */
+	private ArrayList<String> usernames = new ArrayList<String>();
+		
+	/**
 	 * Initialization of file reader
 	 * @param coursePath
 	 * @param studentPath
@@ -44,12 +49,16 @@ public class FileInfoReader {
 	 * @param professors
 	 * @param students
 	 */
-	public FileInfoReader(String coursePath, String studentPath, String professorPath, String adminPath, 
-			ArrayList<Course> courses, ArrayList<Professor> professors, ArrayList<Student> students, ArrayList<Admin> admins){
+	public FileInfoReader(ArrayList<Course> courses, ArrayList<Professor> professors, ArrayList<Student> students, 
+			ArrayList<Admin> admins, ArrayList<String> usernames) {
 		this.courses = courses;
 		this.professors = professors;
 		this.students = students;
 		this.admins = admins;
+		this.usernames = usernames;
+	}
+	
+	public void setup(String coursePath, String studentPath, String professorPath, String adminPath) {
 		this.loadAdmin(adminPath);
 		this.loadProfessorWithoutCourse(professorPath);
 		this.loadCourse(coursePath);
@@ -60,7 +69,7 @@ public class FileInfoReader {
 	 * Load professor information without course
 	 * @param professorPath
 	 */
-	private void loadProfessorWithoutCourse(String professorPath) {
+	public void loadProfessorWithoutCourse(String professorPath) {
 		try {
 			File f = new File(professorPath);
 			FileReader fr = new FileReader(f);
@@ -78,6 +87,7 @@ public class FileInfoReader {
 					String password = array[3].trim();
 					Professor professor = new Professor(name, username, password, ID);
 					this.professors.add(professor);
+					this.usernames.add(username);
 					// need to add course in load course.
 				}
 			}				
@@ -92,7 +102,7 @@ public class FileInfoReader {
 	 * Load admin information from given path
 	 * @param adminPath
 	 */
-	private void loadAdmin(String adminPath) {
+	public void loadAdmin(String adminPath) {
 		try {
 			File f = new File(adminPath);
 			FileReader fr = new FileReader(f);
@@ -108,8 +118,10 @@ public class FileInfoReader {
 					String name = array[1].trim();
 					String username = array[2].trim();
 					String password = array[3].trim();
-					Admin admin = new Admin(name, username, password, ID, this.courses, this.professors, this.students);
+					// admin should not be add by admin
+					Admin admin = new Admin(name, username, password, ID, this.courses, this.professors, this.students, this.usernames);
 					this.admins.add(admin);
+					this.usernames.add(username);
 					// need to add course in load course.
 				}
 			}				
@@ -124,7 +136,7 @@ public class FileInfoReader {
 	 * Load student information from given path, after course is loaded
 	 * @param adminPath
 	 */
-	private void loadStudent(String studentPath) {
+	public void loadStudent(String studentPath) {
 		try {
 			File f = new File(studentPath);
 			FileReader fr = new FileReader(f);
@@ -153,6 +165,7 @@ public class FileInfoReader {
 						student.addGradeToCourse(courseID, grade);
 					}
 					this.students.add(student);
+					this.usernames.add(username);
 				}
 			}				
 			fr.close();
@@ -213,6 +226,11 @@ public class FileInfoReader {
 		}
 	}
 	
+	/**
+	 * Get course class by string courseID
+	 * @param courseID
+	 * @return
+	 */
 	private Course getCoursebyID (String courseID) {
 		for (Course course : this.courses) {
 			if (course.getID().equals(courseID))

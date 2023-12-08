@@ -2,7 +2,7 @@
  * All function in Student class test.
  * And protected level function in user class test.
  * 
- * @author Qiwen LUo
+ * @author Qiwen Luo
  */
 
 package roles;
@@ -22,7 +22,7 @@ class StudentTest {
 	Course course;
 	Professor professor;
 	Scanner scanner = new Scanner(System.in);
-	
+		
 	@BeforeEach
 	void setUp() throws Exception {
 		student = new Student("Studentname1", "StudentUsername1", "StudentPassword1", "StudentID1");
@@ -59,6 +59,18 @@ class StudentTest {
 		// other invalid add course is test in same day validation and start time validation
 		
 //		System.out.print(this.student.toString());
+	}
+	
+	@Test
+	void testDropCourse() {
+		
+	}
+	
+	// functions in User superclass
+	
+	@Test
+	void testLogin() {
+		
 	}
 	
 	@Test

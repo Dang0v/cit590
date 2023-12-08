@@ -47,9 +47,48 @@ class ProfessorTest {
 		assertEquals(1, this.professor.addCourse(course));
 		assertEquals(1, this.professor.getCourses().size());
 		
-		// other invalid add course is test in same day validation and start time validation
+		Course course2 = new Course("courseID2", "coursename2", professor , "TR", "12:00", "13:15", 10);
+		assertEquals(1, this.professor.addCourse(course2));
+		assertEquals(2, this.professor.getCourses().size());
+		
+		Course course3 = new Course("courseID3", "coursename3", professor , "MWF", "11:00", "13:00", 10);
+		Course course4 = new Course("courseID4", "coursename4", professor , "MF", "11:00", "13:00", 10);
+		Course course5 = new Course("courseID5", "coursename5", professor , "TR", "8:00", "10:00", 10);
+		
+		// add an existent course
+ 		assertEquals(-1, this.professor.addCourse(course));
+ 		assertEquals(2, this.professor.getCourses().size());
+ 		// add a course with time conflict
+ 		assertEquals(-3, this.professor.addCourse(course3));
+ 		assertEquals(-3, this.professor.addCourse(course4));
+ 		assertEquals(2, this.professor.getCourses().size());
+ 		
+ 		// add a valid course
+ 		assertEquals(1, this.professor.addCourse(course5));
+ 		assertEquals(3, this.professor.getCourses().size());
 		
 //		System.out.print(this.student.toString());
+	}
+	
+	@Test
+	void testDeletCourse() {
+		// add a normal course
+		assertEquals(1, this.professor.addCourse(course));
+		Course course2 = new Course("courseID2", "coursename2", professor , "TR", "12:00", "13:15", 10);
+		assertEquals(1, this.professor.addCourse(course2));
+		
+		// delete a non-existent course
+		assertEquals(false, this.professor.deletCourse("courseID3"));
+		assertEquals(2, this.professor.getCourses().size());
+		
+		// delete an existent course
+		assertEquals(true, this.professor.deletCourse("courseID"));
+		assertEquals(1, this.professor.getCourses().size());
+		
+		assertEquals(true, this.professor.deletCourse("courseID2"));
+		assertEquals(0, this.professor.getCourses().size());
+		
+		
 	}
 	
 	@Test

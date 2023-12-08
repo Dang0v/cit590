@@ -72,34 +72,74 @@ public class Course {
 		this.capacity = capacity;
 	}
 	
+	/**
+	 * Return string type of course
+	 */
+	public String toString() {
+		return this.courseID + "|" + this.coursename + ", " + this.time_start + "-" + this.time_end + " on " 
+				+ this.days + ", with course capacity: " + this.capacity + ", students: " + this.getEnrolledStudent().size() + ", lecturer: " + this.professor.getName();
+	}
+	
+	/**
+	 * Return name of course
+	 * @return
+	 */
 	public String getName() {
 		return this.coursename;
 	}
 	
+	/**
+	 * Return course ID
+	 * @return
+	 */
 	public String getID() {
 		return this.courseID;
 	}
 	
-	public Professor getLecturer() {
+	/**
+	 * Return professor class
+	 * @return
+	 */
+	public Professor getProfessor() {
 		return this.professor;
 	}
 	
+	/**
+	 * Return days
+	 * @return
+	 */
 	public String getDays() {
 		return this.days;
 	}
 	
+	/**
+	 * Return start time string
+	 * @return
+	 */
 	public String getStartTime() {
 		return this.time_start;
 	}
 	
+	/**
+	 * Return start time integer expression
+	 * @return
+	 */
 	public int getStartTimeInt() {
 		return this.timeconverter(time_start);
 	}
 	
+	/**
+	 * Return end time string
+	 * @return
+	 */
 	public String getEndTime() {
 		return this.time_end;
 	}
 	
+	/**
+	 * Return end time integer expression
+	 * @return
+	 */
 	public int getEndTimeInt() {
 		return this.timeconverter(time_end);
 	}
@@ -126,6 +166,14 @@ public class Course {
 	 */
 	public void addEnrolledStudent(Student student) {
 		this.student_enrolled.add(student);
+	}
+	
+	/**
+	 * Remove an enrolled student
+	 * @param student
+	 */
+	public void deleteEnrooledStudent(Student student) {
+		this.student_enrolled.remove(student);
 	}
 	
 	/**
