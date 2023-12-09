@@ -59,6 +59,7 @@ class StudentTest {
 		// other invalid add course is test in same day validation and start time validation
 		
 //		System.out.print(this.student.toString());
+//		System.out.print(this.student.toStringGrades());
 	}
 	
 	@Test
@@ -92,9 +93,9 @@ class StudentTest {
 		
 		// check if course is added this should be correct after function addCourse logic is complete
  		assertEquals(1, this.student.addCourse(course));
- 		assertEquals(-2, this.student.addCourse(course2));
- 		assertEquals(-2, this.student.addCourse(course3));
- 		assertEquals(-2, this.student.addCourse(course4));
+ 		assertEquals(-3, this.student.addCourse(course2));
+ 		assertEquals(-3, this.student.addCourse(course3));
+ 		assertEquals(-3, this.student.addCourse(course4));
  		assertEquals(1, this.student.addCourse(course5));
  		assertEquals(2, this.student.getCoursesWithGrade().size());
 //		System.out.print(this.student.toString());
@@ -120,9 +121,9 @@ class StudentTest {
 		
 		// check if course is added this should be correct after function addCourse logic is complete
  		assertEquals(1, this.student.addCourse(course));
- 		assertEquals(-2, this.student.addCourse(course2));
- 		assertEquals(-2, this.student.addCourse(course3));
- 		assertEquals(-2, this.student.addCourse(course4));
+ 		assertEquals(-3, this.student.addCourse(course2));
+ 		assertEquals(-3, this.student.addCourse(course3));
+ 		assertEquals(-3, this.student.addCourse(course4));
  		assertEquals(1, this.student.addCourse(course5));
  		assertEquals(2, this.student.getCoursesWithGrade().size());
 //		System.out.print(this.student.toString());

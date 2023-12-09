@@ -60,6 +60,10 @@ class FileInfoReaderTest {
 		}
 		assertEquals("001", course.getEnrolledStudent().get(0).getUserID());
 		System.out.println(course.toString());
+		
+		Student student = students.get(0);
+		System.out.println(student.toString());
+		System.out.println(student.toStringGrades());
 	}
 	
 	@Test

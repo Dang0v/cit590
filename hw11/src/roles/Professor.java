@@ -7,6 +7,7 @@
 package roles;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import courses.Course;
 
@@ -26,9 +27,37 @@ public class Professor extends User {
 	
 	/**
 	 * Return string expression of professor
+	 * @return
 	 */
 	public String toString() {
 		return "Name: " + this.getName() + "\nUser ID: " + this.getUserID() + "\nCourse: " + teachingcourses + "\n";
+	}
+	
+	/**
+	 * Return string expression of courses
+	 * @return
+	 */
+	public String toStringCourse() {
+		String coursesString = new String();
+		if (this.teachingcourses == null) return null;
+		for (Course course : this.teachingcourses) {
+			coursesString = coursesString + course.toString() + "/n";
+		}
+		return coursesString;
+	}
+	
+	/**
+	 * Return string expression of all the student of a certain course
+	 * @param CourseID
+	 * @return
+	 */
+	public String toStringStudent(String CourseID) {
+		String studentString = new String();
+		if (this.getStudent(CourseID) == null) return null;
+		for (Student student : getStudent(CourseID)) {
+			studentString = studentString + student.getUserID() + " " + student.getName() + "\n";
+		}
+		return studentString;
 	}
 	
 	/**
@@ -37,6 +66,17 @@ public class Professor extends User {
 	 */
 	public ArrayList<Course> getCourses() {
 		return this.teachingcourses;
+	}
+	
+	/**
+	 * Get a certain course name
+	 * @param courseID
+	 * @return
+	 */
+	public String getCourseNamebyCourseID(String courseID) {
+		Course course = this.getCoursebyID(courseID);
+		if (course == null) return null;
+		return course.getName();
 	}
 	
 	/**
@@ -88,7 +128,20 @@ public class Professor extends User {
 	 */
 	public ArrayList<Student> getStudent(String CourseID) {
 		Course course = this.getCoursebyID(CourseID);
+		if (course == null) return null;
 		return course.getEnrolledStudent();
+	}
+	
+	public Course getConflictCourse(Course course) {
+		for (Course coursetoCompare : this.teachingcourses) {
+            // same day validation
+            if (this.sameDayValidation(course, coursetoCompare) == true) {
+            	// start time validation
+            	if (this.checkTimeConflict(course, coursetoCompare) == true)
+            		return coursetoCompare;
+            }
+		}
+		return null;
 	}
 	
 }

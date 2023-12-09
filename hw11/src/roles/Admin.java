@@ -77,6 +77,7 @@ public class Admin extends User {
 	 * @return true if removed
 	 */
 	public boolean deletProfessor(String professorID) {
+		// TODO delete the course
 		Professor professor = this.getProfessorbyID(professorID);
 		if(this.professors.remove(professor)) {
 			usernames.remove(professor.getUserName());
@@ -111,7 +112,7 @@ public class Admin extends User {
 	 * Add a course to student
 	 * @param userID
 	 * @param courseID
-	 * @return 1 if success, -1 if student does not exist, -2 if course does not exist, -3 if student has time conflict
+	 * @return 1 if success, -1 if student does not exist, -2 if course does not exist, -3 if student has time conflict, -4 if student has already enrolled
 	 */
 	public int addStudentCourse(String userID, String courseID) {
 		// check if student is existed
@@ -122,9 +123,25 @@ public class Admin extends User {
 		Course course = this.getCoursebyID(courseID);
 		if (course == null)
 			return -2;
-		if (student.addCourse(course) == -3)
+		int flag = student.addCourse(course);
+		// time conflict with student
+		if (flag == -3)
 			return -3;
+		// already enrolled
+		else if(flag == -1)
+			return -4;
 		return 1;
+	}
+	
+	/**
+	 * Get student's the conflict course
+	 * @param student
+	 * @param courseID
+	 * @return
+	 */
+	public Course getStudentConflictCourse(Student student, String courseID) {
+		Course course = this.getCoursebyID(courseID);
+		return student.getConflictCourse(course, student.getCoursesWithGrade());
 	}
 	
 	/**
@@ -228,13 +245,23 @@ public class Admin extends User {
 			return false;
 		}
 	}
+	
+	/**
+	 * Check if username is existent
+	 * @param username
+	 * @return true if is already used, false if available
+	 */
+	public boolean checkUsername(String username) {
+		if (usernames.contains(username)) return true;
+		return false;
+	}
 		
 	/**
 	 * Get Course by courseID
 	 * @param courseID
 	 * @return Course class of course
 	 */
-	private Course getCoursebyID(String courseID) {
+	public Course getCoursebyID(String courseID) {
 		for (Course course : this.courses) {
 			if (course.getID().equals(courseID)) {
 				return course;
@@ -248,7 +275,7 @@ public class Admin extends User {
 	 * @param professorID
 	 * @return Professor class of professor
 	 */
-	private Professor getProfessorbyID(String professorID) {
+	public Professor getProfessorbyID(String professorID) {
 		for (Professor professor : this.professors) {
 			if (professor.getUserID().equals(professorID)) {
 				return professor;
@@ -262,7 +289,7 @@ public class Admin extends User {
 	 * @param studentID
 	 * @return Student class of student
 	 */
-	private Student getStudentbyID(String studentID) {
+	public Student getStudentbyID(String studentID) {
 		for (Student student : this.students) {
 			if (student.getUserID().equals(studentID)) {
 				return student;

@@ -36,6 +36,35 @@ public class Student extends User {
         }
 		return "Name: " + this.getName() + "\nUser ID: " + this.getUserID() + "\nCourse: " + coursewithgrades + "\n";
 	}
+	
+	/**
+	 * String output for courses
+	 * @return
+	 */
+	public String toStringEnrolledCourse() {
+		String courses = new String();
+		for (HashMap.Entry<Course, String> entry : enrolledcourses.entrySet()) {
+            Course course = entry.getKey();
+            courses = courses + course.toString() + "\n";
+        }
+		return courses;
+	}
+	
+	/**
+	 * String output of grade of courses
+	 * @return
+	 */
+	public String toStringGrades() {
+		String coursesGrades = new String();
+		for (HashMap.Entry<Course, String> entry : enrolledcourses.entrySet()) {
+            String coursename = entry.getKey().getName();
+            String courseID = entry.getKey().getID();
+            String grade = entry.getValue();
+            String singlecourse = "Grade of " + courseID + " " + coursename + " : " + grade;
+            coursesGrades = coursesGrades + singlecourse + "\n";
+        }
+		return coursesGrades;
+	}
 		
 	/**
 	 * Get enrolled courses with grades
@@ -80,6 +109,26 @@ public class Student extends User {
 		course.addEnrolledStudent(this);
 		return 1;
 	}
+	
+	/**
+	 * Get course that has conflict with
+	 * @param course
+	 * @param enrolledcourses
+	 * @return course class of conflict course
+	 */
+	public Course getConflictCourse(Course course, HashMap<Course, String> enrolledcourses) {
+		for (HashMap.Entry<Course, String> entry : enrolledcourses.entrySet()) {
+			// check for days
+            Course coursetoCompare = entry.getKey();
+            // same day validation
+            if (this.sameDayValidation(course, coursetoCompare) == true) {
+            	// start time validation
+            	if (this.checkTimeConflict(course, coursetoCompare) == true)
+            		return coursetoCompare;
+            }
+		}
+		return null;
+	}
 		
 	/**
 	 * Add a grade to a existed course by courseID
@@ -89,15 +138,11 @@ public class Student extends User {
 	 */
 	public boolean addGradeToCourse(String courseID, String grade) {
 		Course course = this.getCoursebyID(courseID);
-		if (course == null) return false;
 		// course validation
-		if(enrolledcourses.containsKey(course)) {
-			enrolledcourses.put(course, grade);
-			return true;
-		// add grade failed
-		} else {
-			return false;
-		}
+		if (course == null) return false;
+		enrolledcourses.put(course, grade);
+		return true;
+
 	}
 	
 	/**
@@ -122,11 +167,10 @@ public class Student extends User {
 	 */
 	private Course getCoursebyID(String courseID) {
 		for (HashMap.Entry<Course, String> entry : enrolledcourses.entrySet()) {
-            if (entry.getKey().getID() == courseID) {
+            if (entry.getKey().getID().equals(courseID)) {
                 return entry.getKey();
             }
         }
-		// TODO need a validation
         return null;
     }
 	
