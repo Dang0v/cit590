@@ -9,6 +9,7 @@ import expenses.file.ExpenseFileReader;
 /**
  * Creates and stores monthly expenses.
  * @author lbrandon
+ * @author Qiwen Luo
  */
 public class Expenses {
 

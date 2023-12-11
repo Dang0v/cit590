@@ -12,6 +12,7 @@ import expenses.file.ExpenseFileReader;
 /**
  * Provides static methods for extracting information from monthly expenses.
  * @author lbrandon
+ * @author Qiwen Luo
  */
 public class ExpenseManagement {
 

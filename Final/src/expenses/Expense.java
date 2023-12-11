@@ -3,6 +3,7 @@ package expenses;
 /**
  * Represents a single expense for a particular month.
  * @author lbrandon
+ * @author Qiwen Luo
  */
 public class Expense {
 
